@@ -14,6 +14,9 @@ build/release/my_string.o: src/my_string.cpp
 build/release/matrix.o: src/matrix.cpp
 	$(COMPILER) $(COMPILER_FLAGS) -o build/release/matrix.o -c src/matrix.cpp
 
+build/release/matrix.o: src/short_array.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/release/short_array.o -c src/short_array.cpp
+
 .PHONY: run
 run: build/release/output.out
 	build/release/output.out
@@ -37,6 +40,9 @@ build/debug/my_string.o: src/my_string.cpp
 
 build/debug/matrix.o: src/matrix.cpp
 	$(COMPILER) $(DEBUG_FLAGS) -o build/debug/matrix.o -c src/matrix.cpp
+
+build/debug/matrix.o: src/short_array.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/debug/short_array.o -c src/short_array.cpp
 
 .PHONY: debug 
 debug: build/debug/debug.out

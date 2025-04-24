@@ -249,3 +249,15 @@ istream& operator>>(istream& is, MyString& str) {
     str = MyString(buffer); // Создаем новую строку на основе буфера
     return is;
 }
+
+char& MyString::operator[](int i) {
+    if (i < 0 || i >= length)
+        throw std::out_of_range("Index out of range.");
+    return data[i];
+}
+
+const char& MyString::operator[](int i) const {
+    if (i < 0 || i >= length)
+        throw std::out_of_range("Index out of range.");
+    return data[i];
+}

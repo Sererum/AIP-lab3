@@ -18,90 +18,6 @@
 #include "my_string.h"
 #include "matrix.h"
 
-
-/*class ShortArray {
-	short* array;
-	size_t size;
-	size_t capacity;
-
-	void add() {
-		if (capactiry == size)
-			increase_capacity();
-	}
-
-	void increase_capacity() {
-		capactiy *= 2;			
-		short* new_array = new short[capacity]; 
-		for (int i = 0; i < size; ++i) {
-			new_array[i] = array[i];
-		}			
-		delete array;
-		array = new_array;
-	}
-}*/
-
-#define LOCAL 0
-#define DYNAMIC 1
-
-union ShortArray {
-	struct {
-		short array[11];
-		short tail: 15;
-		size_t flag: 1; // -> [0, 1]
-	} local;
-	struct {
-		short* array;
-		size_t size;
-		size_t capactity: 63;
-		size_t flag: 1;
-	} dynamic;
-
-	ShortArray() {
-		local.flag = LOCAL;
-	}
-
-	short& operator[](int index) const {
-		if (flag == LOCAL) {
-			if (index < 11)
-				return array[index];
-			/*if (index == 11)
-				return tail;*/
-// [       ] 
-		} else {
-			return dynamic.array[index];
-		}
-	}
-
-	bool is_dynamic() const {
-		return dynamic.flag == DYNAMIC;
-	}
-
-// [..........................0]
-
-// short flag: 1; -> [-1, 0] // 1
-// -4, -3, -2, -1, 0, 1, 2, 3, 4
-
-	/*short* array;
-	size_t size;
-	size_t capacity;
-
-	void add() {
-		if (capactiry == size)
-			increase_capacity();
-	}
-
-	void increase_capacity() {
-		capactiy *= 2;			
-		short* new_array = new short[capacity]; 
-		for (int i = 0; i < size; ++i) {
-			new_array[i] = array[i];
-		}			
-		delete array;
-		array = new_array;
-	}*/
-};
-
-
 int main() {
 
     /**
@@ -259,10 +175,11 @@ int main() {
      * массива, киньте какое-нибудь исключение.
      */
 
-    /* {
+    {
         MyString s1("abc");
         s1[0] = s1[1] = 'd';
-    } */
+		assert(s1 == "ddc");
+    }
 
     /**
      * Задание 1.6. Операторы ввода и вывода с потоками стандартной библиотеки.
@@ -320,7 +237,6 @@ int main() {
 
     {
 
-
     }
 
     /**
@@ -348,6 +264,7 @@ int main() {
 
     {
 
+		
     }
 
     /**

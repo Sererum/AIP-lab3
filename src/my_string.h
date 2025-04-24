@@ -44,6 +44,9 @@ public:
 
 	friend ostream& operator<<(ostream& os, const MyString& str);
 	friend istream& operator>>(istream& is, MyString& str);
+
+    char& operator[](int i); // Для неконстантных объектов
+    const char& operator[](int i) const; // Для константных объектов
 };
 
 MyString operator+(const char* first, const MyString& second); 
