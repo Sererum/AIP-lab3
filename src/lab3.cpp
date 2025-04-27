@@ -17,6 +17,7 @@
 #include "libs.h"
 #include "my_string.h"
 #include "matrix.h"
+#include "short_array.h"
 
 int main() {
 
@@ -236,7 +237,57 @@ int main() {
      */
 
     {
+        ShortArray arr;
 
+        arr.push(10);
+        arr.push(20);
+        arr.push(30);
+
+        std::cout << "Size: " << arr.size() << "\n";
+        std::cout << "Elements: ";
+        for (size_t i = 0; i < arr.size(); ++i) {
+            std::cout << arr[i] << " ";
+        }
+        std::cout << "\n";
+
+        arr.resize(5, 42);
+        std::cout << "After resize: ";
+        for (size_t i = 0; i < arr.size(); ++i) {
+            std::cout << arr[i] << " ";
+        }
+        std::cout << "\n";
+
+        std::cout << "Pop: " << arr.pop() << "\n";
+        std::cout << "Size after pop: " << arr.size() << "\n";
+
+	 	// Тест 1: Увеличение локального массива в пределах MAX_LOC_SIZE
+		{
+			ShortArray arr(5, 10);
+			arr.resize(8, 20);
+			assert(arr.is_local());
+			assert(arr.size() == 8);
+			for (size_t i = 0; i < 5; ++i) assert(arr[i] == 10);
+			for (size_t i = 5; i < 8; ++i) assert(arr[i] == 20);
+		}
+
+		// Тест 2: Увеличение локального массива до динамического
+		{
+			ShortArray arr(10, 5);
+			arr.resize(15, 10);
+			assert(arr.is_dynamic());
+			assert(arr.size() == 15);
+			for (size_t i = 0; i < 10; ++i) assert(arr[i] == 5);
+			for (size_t i = 10; i < 15; ++i) assert(arr[i] == 10);
+		}
+
+		// Тест 3: Уменьшение динамического массива до локального
+		{
+			ShortArray arr(20, 3);
+			arr.resize(10, 0);
+			assert(arr.is_local());
+			assert(arr.size() == 10);
+			for (size_t i = 0; i < 10; ++i) assert(arr[i] == 3);
+    	}       
     }
 
     /**
