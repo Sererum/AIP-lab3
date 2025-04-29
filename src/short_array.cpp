@@ -85,8 +85,9 @@ void ShortArray::push(short new_val) {
     if (is_local() && local.size < MAX_LOC_SIZE) {
         local.array[local.size++] = new_val;
 		return;
-    } 
+    }
 
+	// Если нужна динамическая память
 	if (is_local()) {
 		int size = local.size;
 		short copy_array[MAX_LOC_SIZE];
@@ -96,6 +97,7 @@ void ShortArray::push(short new_val) {
 		dynamic.capacity = MIN_DYN_CAPAC;
 		dynamic.array = new short[dynamic.capacity];
 		std::copy(copy_array, copy_array + size, dynamic.array);
+
 	} else if (dynamic.size == dynamic.capacity) {
 		dynamic.capacity *= 2;
 		short* new_array = new short[dynamic.capacity];
@@ -107,7 +109,6 @@ void ShortArray::push(short new_val) {
 }
 
 short ShortArray::pop() {
-	
 	if (is_local()) {
         if (local.size == 0) {
             throw std::out_of_range("Array is empty");
@@ -115,13 +116,11 @@ short ShortArray::pop() {
         return local.array[--local.size];
 	}
 
-
 	if (dynamic.size == 0)
 		throw std::out_of_range("Array is empty");
-	
+
 	short pop_value = dynamic.array[--dynamic.size];
 	if (dynamic.size == MAX_LOC_SIZE) {
-
 		short copy_array[MAX_LOC_SIZE];
 		std::copy(dynamic.array, dynamic.array + MAX_LOC_SIZE, copy_array);
 		delete[] dynamic.array;
@@ -141,6 +140,7 @@ void ShortArray::resize(size_t new_size, short fill_value) {
 }
 
 void ShortArray::resize_local(size_t new_size, short fill_value) {
+	// Если дин. память не требуется
 	if (new_size <= MAX_LOC_SIZE) {
 		if (new_size > local.size)
 			std::fill(local.array + local.size, local.array + new_size, fill_value); 
@@ -149,12 +149,9 @@ void ShortArray::resize_local(size_t new_size, short fill_value) {
 		return; 
 	}
 
-	short cur_array[MAX_LOC_SIZE];
-	std::copy(local.array, local.array + local.size, cur_array);
-
+	// Если нужна дин. память
 	short *new_array = new short[new_size];
-	std::copy(cur_array, cur_array + local.size, new_array);
-
+	std::copy(local.array, local.array + local.size, new_array);
 	std::fill(new_array + local.size, new_array + new_size, fill_value);
 
 	dynamic.array = new_array;
@@ -177,7 +174,7 @@ void ShortArray::resize_dynamic(size_t new_size, short fill_value) {
 	}
 
 	// 11 < new_size <= size
-	if (new_size <= dynamic.size) {
+	else if (new_size <= dynamic.size) {
 		dynamic.size = new_size;
 		return;
 	}

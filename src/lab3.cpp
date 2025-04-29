@@ -259,7 +259,32 @@ int main() {
 
         std::cout << "Pop: " << arr.pop() << "\n";
         std::cout << "Size after pop: " << arr.size() << "\n";
+    }
 
+    /**
+     * Задание 3.2. Объединения.
+     *
+     * Есть проблема: даже для самого маленького массива будет
+     * выделена динамическая память. Однако, размер у такой структуры может
+     * быть, например, 24 байта, что вмещает встроенный массив из 12 элементов.
+     *
+     * С помощью объединений в языке С мы можем интерпретировать одни и те же
+     * данные по разному. Поля динамического массива { short *, size_t, size_t }
+     * мы можем воспринимать как массив short.
+     *
+     * Используя объединения, реализуйте хранение элементов массива прямо в
+     * памяти, отведенной под этот класс, если массив туда помещается.
+     * По каким признаком вы можете различить хранится ли память динамически или
+     * она встроена в класс?
+     *
+     * Рассчитайте допустимый размер массива через оператор sizeof. Проверьте,
+     * что объем памяти, занимаемой классом не увеличилась.
+     *
+     * Продемонстрируйте, что все методы работают верно для обоих способов
+     * хранения памяти.
+     */
+
+    {
 	 	// Тест 1: Увеличение локального массива в пределах MAX_LOC_SIZE
 		{
 			ShortArray arr(5, 10);
@@ -288,34 +313,6 @@ int main() {
 			assert(arr.size() == 10);
 			for (size_t i = 0; i < 10; ++i) assert(arr[i] == 3);
     	}       
-    }
-
-    /**
-     * Задание 3.2. Объединения.
-     *
-     * Есть проблема: даже для самого маленького массива будет
-     * выделена динамическая память. Однако, размер у такой структуры может
-     * быть, например, 24 байта, что вмещает встроенный массив из 12 элементов.
-     *
-     * С помощью объединений в языке С мы можем интерпретировать одни и те же
-     * данные по разному. Поля динамического массива { short *, size_t, size_t }
-     * мы можем воспринимать как массив short.
-     *
-     * Используя объединения, реализуйте хранение элементов массива прямо в
-     * памяти, отведенной под этот класс, если массив туда помещается.
-     * По каким признаком вы можете различить хранится ли память динамически или
-     * она встроена в класс?
-     *
-     * Рассчитайте допустимый размер массива через оператор sizeof. Проверьте,
-     * что объем памяти, занимаемой классом не увеличилась.
-     *
-     * Продемонстрируйте, что все методы работают верно для обоих способов
-     * хранения памяти.
-     */
-
-    {
-
-		
     }
 
     /**
@@ -355,13 +352,76 @@ int main() {
      * Используйте для хранения строковых данных ваш класс MyString.
      */
 
-    /* {
+    {
         WorkerDb db;
         db["Ivanov"] = WorkerData("Ivan", 34, ...);
         db["Petrov"] = WorkerData("Petr", 43, ...);
         std::cout << "Ivanov's name = " << db["Ivanov"].name << "\n";
         std::cout << "Petrov's age = " << db["Petrov"].age << "\n";
-    } */
+    }
+
+
+struct WorkerData {
+	MyString name;
+	int age;
+
+	WorkerData(const MyString& name, int age): name(name), age(age) {}
+}
+
+
+class WorkerDb {
+public:
+	MyString* last_names;
+	WorkerData* data;
+
+	int size;
+	int capacity;
+
+public:
+
+	const WorkerDb constDb;
+
+	WorkerDb copy = constDb[random_name];	
+
+	WorkerDb operator[](const MyString& target) const {
+		for (int i = 0; i < size; ++i) {
+		   if (target == last_names[i])
+		   		return data[i];	   
+		   
+		throw std::runtime();
+	}
+	
+	WorkerDb& operator[](const MyString& target) {
+		for (int i = 0; i < size; ++i) {
+		   if (target == last_names[i])
+		   		return data[i];	   
+		   
+		last_names[size] = target;
+		data[size] = WorkerData();
+		return data[size++];
+	}
+
+	
+	bool contains(const MyString& target) {
+		for (int i = 0; i < size; ++i) {
+		   if (target == last_names[i])
+		   		return true;	   
+		return false;
+	}
+
+	WorkerData remove(const MyString& target) {
+
+
+	}
+	
+	random_name;
+	if (names.contains(random_name))
+		return names[random_name];
+
+    ...
+
+
+	}
 
     /**
      * Задание 4.2. Итератор.
