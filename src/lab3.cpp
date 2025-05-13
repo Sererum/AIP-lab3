@@ -18,6 +18,8 @@
 #include "my_string.h"
 #include "matrix.h"
 #include "short_array.h"
+#include "worker_db.h"
+#include "bool_array.h"
 
 int main() {
 
@@ -78,7 +80,6 @@ int main() {
 
     /**
      * Задание 1.2.2. Бинарные операторы.
-     *
      * Для класса `Matrix` перегрузите следующие операторы методом класса:
      * - `+` и `-` с объектом класса `Matrix`;
      * - `*` с объектом класса `Matrix`;
@@ -354,74 +355,11 @@ int main() {
 
     {
         WorkerDb db;
-        db["Ivanov"] = WorkerData("Ivan", 34, ...);
-        db["Petrov"] = WorkerData("Petr", 43, ...);
+        db["Ivanov"] = WorkerData("Ivan", 34);
+        db["Petrov"] = WorkerData("Petr", 43);
         std::cout << "Ivanov's name = " << db["Ivanov"].name << "\n";
         std::cout << "Petrov's age = " << db["Petrov"].age << "\n";
     }
-
-
-struct WorkerData {
-	MyString name;
-	int age;
-
-	WorkerData(const MyString& name, int age): name(name), age(age) {}
-}
-
-
-class WorkerDb {
-public:
-	MyString* last_names;
-	WorkerData* data;
-
-	int size;
-	int capacity;
-
-public:
-
-	const WorkerDb constDb;
-
-	WorkerDb copy = constDb[random_name];	
-
-	WorkerDb operator[](const MyString& target) const {
-		for (int i = 0; i < size; ++i) {
-		   if (target == last_names[i])
-		   		return data[i];	   
-		   
-		throw std::runtime();
-	}
-	
-	WorkerDb& operator[](const MyString& target) {
-		for (int i = 0; i < size; ++i) {
-		   if (target == last_names[i])
-		   		return data[i];	   
-		   
-		last_names[size] = target;
-		data[size] = WorkerData();
-		return data[size++];
-	}
-
-	
-	bool contains(const MyString& target) {
-		for (int i = 0; i < size; ++i) {
-		   if (target == last_names[i])
-		   		return true;	   
-		return false;
-	}
-
-	WorkerData remove(const MyString& target) {
-
-
-	}
-	
-	random_name;
-	if (names.contains(random_name))
-		return names[random_name];
-
-    ...
-
-
-	}
 
     /**
      * Задание 4.2. Итератор.
@@ -465,15 +403,17 @@ public:
      * Проверьте ниже работу итератора.
      */
 
-    /* {
+    {
         WorkerDb db;
-        db["Ivanov"] = WorkerData("Ivan", 34, ...);
-        db["Petrov"] = WorkerData("Petr", 43, ...);
+        db["Ivanov"] = WorkerData("Ivan", 34);
+        db["Petrov"] = WorkerData("Petr", 43);
         for (auto it = db.begin(); it != db.end(); ++it)
         {
-            std::cout << it.key() << " -> " << it->name << '\n';
+            std::cout << it.key() << " -> " << it->name << std::endl;
         }
-    } */
+
+		db.end()->name;
+    }
 
     /**
      * Задание 4.3. Работа "прикладного программиста".
@@ -484,6 +424,10 @@ public:
      * возраст сотрудников. Эти функции не должны быть дружественными классу
      * `WorkerDb`.
      */
+
+	{
+		// Надо написать тесты
+	}	
 
     /**
      * Задание 5. Неявно определенные операторы. Удаление операторов.
@@ -497,7 +441,7 @@ public:
      */
 
     {
-
+		// Надо написать тесты
     }
 
     /**
@@ -515,25 +459,30 @@ public:
      * Класс должен поддерживать следующее поведение:
      */
 
-    /* {
+    {
         /// Создается массив из 10 значений false
         BoolArray ar1(10);
+		std::cout << ar1 << std::endl;
 
         /// Создается массив из 5 значений true
         BoolArray ar2(5, true);
+		std::cout << ar2 << std::endl;
 
         /// Создается независимая копия `ar2`
         BoolArray ar3(ar2);
+		std::cout << ar3 << std::endl;
 
         /// 4 и 6 элементу (нумерация с 0) устанавливаются заданное значение
         ar1[4] = ar1[6] = true;
+		std::cout << (bool)ar1[0] << std::endl;
 
         /// Над полученными значениями выполняем логические операции
-        ar1[2] = (!ar1[6] && ar1[8] || (ar1[0] != true));
+        ar1[2] = ((!ar1[6] && ar1[8]) || (ar1[0] != true));
+		std::cout << ar1 << std::endl;
 
         /// Выведем массив на печать
         std::cout << "[";
-        for (int i = 0; i < ar1.size(); ++i) {
+        for (size_t i = 0; i < ar1.size(); ++i) {
             if (i > 0) std::cout << ", ";
             std::cout << ar1[i];
         }
@@ -541,7 +490,7 @@ public:
 
         /// Выведем массив на печать по-другому
         std::cout << "[";
-        for (int i = 0, printed = 0; i < ar1.size(); ++i) {
+        for (size_t i = 0, printed = 0; i < ar1.size(); ++i) {
             if (ar1[i]) {
                 if (printed++ > 0) std::cout << ", ";
                 std::cout << i;
@@ -554,17 +503,12 @@ public:
        /// новые значения дополняются заданным значением (по умолчанию false). Если
        /// новый размер меньше, то конец массива отбрасывается.
 
-        ar1.resize(12, true);
-        /// выведите массив на печать
-
-        //...
-
         ar1.resize(4, true);
-        /// выведите массив на печать снова
+		std::cout << ar1 << std::endl;
 
-        //...
-
-    } */
+        ar1.resize(12, true);
+		std::cout << ar1 << std::endl;
+    }
 
 	return 0;
 }

@@ -1,6 +1,6 @@
 COMPILER = g++
 COMPILER_FLAGS = -Isrc -O2 -Wall -Wextra -std=c++17 -D_FORTIFY_SOURCE=2 -fstack-protector-strong -flto
-OBJECTS = build/release/lab3.o build/release/my_string.o build/release/matrix.o build/release/short_array.o
+OBJECTS = build/release/lab3.o build/release/my_string.o build/release/matrix.o build/release/short_array.o build/release/worker_db.o build/release/base_file.o build/release/bool_array.o
 
 build/release/output.out: $(OBJECTS)
 	$(COMPILER) $(COMPILER_FLAGS) -o build/release/output.out $(OBJECTS)
@@ -17,6 +17,15 @@ build/release/matrix.o: src/matrix.cpp
 build/release/short_array.o: src/short_array.cpp
 	$(COMPILER) $(COMPILER_FLAGS) -o build/release/short_array.o -c src/short_array.cpp
 
+build/release/worker_db.o: src/worker_db.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/release/worker_db.o -c src/worker_db.cpp
+
+build/release/base_file.o: src/base_file.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/release/base_file.o -c src/base_file.cpp
+
+build/release/bool_array.o: src/bool_array.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/release/bool_array.o -c src/bool_array.cpp
+
 .PHONY: run
 run: build/release/output.out
 	build/release/output.out
@@ -27,7 +36,7 @@ clean:
 	rm -rf build/debug/*
 
 DEBUG_FLAGS = -Isrc -Wall -Wextra -Werror -g -O0 -fsanitize=address -fsanitize=undefined -std=c++17
-DEBUG_OBJECTS = build/debug/lab3.o build/debug/my_string.o build/debug/matrix.o build/debug/short_array.o
+DEBUG_OBJECTS = build/debug/lab3.o build/debug/my_string.o build/debug/matrix.o build/debug/short_array.o build/debug/worker_db.o build/debug/base_file.o build/debug/bool_array.o
 
 build/debug/debug.out: $(DEBUG_OBJECTS)
 	$(COMPILER) $(DEBUG_FLAGS) -o build/debug/debug.out $(DEBUG_OBJECTS)
@@ -43,6 +52,15 @@ build/debug/matrix.o: src/matrix.cpp
 
 build/debug/short_array.o: src/short_array.cpp
 	$(COMPILER) $(COMPILER_FLAGS) -o build/debug/short_array.o -c src/short_array.cpp
+
+build/debug/worker_db.o: src/worker_db.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/debug/worker_db.o -c src/worker_db.cpp
+
+build/debug/base_file.o: src/base_file.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/debug/base_file.o -c src/base_file.cpp
+
+build/debug/bool_array.o: src/bool_array.cpp
+	$(COMPILER) $(COMPILER_FLAGS) -o build/debug/bool_array.o -c src/bool_array.cpp
 
 .PHONY: debug 
 debug: build/debug/debug.out
